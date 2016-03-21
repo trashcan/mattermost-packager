@@ -1,4 +1,5 @@
 #!/bin/bash -x
+set -e
 
 # Build Ubuntu 14.04 LTS DEB based on:
 # http://docs.mattermost.com/install/prod-ubuntu.html
@@ -12,7 +13,7 @@
 # SSL? Maybe just install a commented out nginx config file with directions?
 # Should I randomize the DB password? This might cause problems if there is a failed upgrade in the future.
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 
 cd /root/
 apt-get update
@@ -20,7 +21,7 @@ apt-get install -q -y ruby-dev build-essential nginx
 gem install fpm -q
 
 mkdir -p /opt
-wget https://github.com/mattermost/platform/releases/download/v${VERSION}/mattermost.tar.gz -O /tmp/mattermost.tar.gz -nv
+wget https://releases.mattermost.com/${VERSION}/mattermost-team-${VERSION}-linux-amd64.tar.gz  -O /tmp/mattermost.tar.gz -nv
 tar xzf /tmp/mattermost.tar.gz --directory=/opt/
 
 mkdir -p /etc/nginx/sites-available
@@ -33,7 +34,7 @@ cp upstart.conf /etc/init/mattermost.conf
 adduser --gecos '' mattermost
 chown -R mattermost:mattermost /opt/mattermost/
 
-fpm -f -s dir -t deb -n mattermost-platform -v $VERSION \
+fpm -f -s dir -t deb -n mattermost-team -v ${VERSION} \
   --url http://www.mattermost.org \
   --description "Mattermost is an open source, self-hosted Slack-alternative." \
   --deb-user mattermost --deb-group mattermost \
