@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 # Build Debian Jessie DEB based on:
 # http://docs.mattermost.com/install/prod-debian.html
